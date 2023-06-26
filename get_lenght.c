@@ -8,18 +8,20 @@
  *
  * Return: lenght.
  */
-int get_lenght(const char *format, int *i va_list list)
+int get_lenght(const char *format, int *i, va_list list)
 {
 	int curr_i;
 	int lenght = 0;
+
 	for (curr_i = *i + 1; format[curr_i] != '\0'; curr_i++)
 	{
+
 		if (is_digit(format[curr_i]))
 		{
 			lenght *= 10;
-			lenght += format[curr_i]- '0';
+			lenght += format[curr_i] - '0';
 		}
-		else if (format[curr_i]== '*')
+		else if (format[curr_i] == '*')
 		{
 			curr_i++;
 			lenght = va_arg(list, int);
@@ -28,7 +30,6 @@ int get_lenght(const char *format, int *i va_list list)
 		else
 			break;
 	}
-	
 	*i = curr_i - 1;
 	return (lenght);
 }
