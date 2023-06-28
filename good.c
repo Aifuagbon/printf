@@ -6,8 +6,12 @@
  *
  * Return: 1 if y is good, 0 otherwise
  */
+
 int good(char y)
+
 {
+	char c;
+
 	if (y >= 20 && c < 50)
 		return (1);
 

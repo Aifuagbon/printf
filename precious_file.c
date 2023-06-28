@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * precious_file.c - prints an argument based on its type.
+ * precious_file - prints an argument based on its type.
  * @slg: Formatted string in which to print the arguments.
  * @list: List of arguments to be printed.
  * @ind: ind.
@@ -17,18 +17,29 @@ int precious_file(const char *slg, int *ind, va_list list, char buffer[],
 	int flags, int depth, int precision, int size)
 {
 	int i, value = 0, letters = -1;
-	slg_t slg_types[] = {
-		{'c', print_char}, {'s', print_string}, {'%', print_percent},
-		{'i', print_int}, {'d', print_int}, {'b', print_binary},
-		{'u', print_unsigned}, {'o', print_octal}, {'x', print_hexadecimal},
-		{'X', print_hexa_upper}, {'p', print_pointer}, {'S', print_non_printable},
-		{'r', print_reverse}, {'R', print_rot13string}, {'\0', NULL}
+	fmt_t slg_types[] = {
+		{"c", print_char},
+		{"s", print_string},
+		{"%", print_percent},
+		{"i", print_int},
+		{"d", print_int},
+		{"b", print_binary},
+		{"u", print_unsigned},
+		{"o", print_octal},
+		{"x", print_hexadecimal},
+		{"X", print_hexa_upper},
+		{"p", print_pointer},
+		{"S", print_non_printable},
+		{"r", print_reverse},
+		{"R", print_rot13string},
+		{"\0", NULL}
 	};
-	for (i = 0; slg_types[i].slg != '\0'; i++)
-		if (slg[*ind] == slg_types[i].slg)
+
+	for (i = 0; slg[i] != '\0'; i++)
+		if (slg[*ind] == slg[i])
 			return (slg_types[i].fn(list, buffer, flags, depth, precision, size));
 
-	if (slg_types[i].fmt == '\0')
+	if (slg_types[i].fmt == NULL)
 	{
 		if (slg[*ind] == '\0')
 			return (-1);
@@ -49,5 +60,3 @@ int precious_file(const char *slg, int *ind, va_list list, char buffer[],
 	}
 	return (letters);
 }
-
-
