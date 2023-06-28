@@ -10,9 +10,8 @@
 int good(char y)
 
 {
-	char c;
-
-	if (y >= 20 && c < 50)
+	
+	if (y >= 20 && y < 50)
 		return (1);
 
 	return (0);

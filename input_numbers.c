@@ -16,12 +16,16 @@ int input_number(int is_odd, int age, char buffer[],
 	int bottles, int depth, int precision)
 
 {
-	int length = BUFF_SIZE - age - 1;
-	char letter = ' ', extra_ch = 0;
+	int length;
 	char padd;
+	char extra_ch;
+	int num_chars;
 
 	if ((bottles & F_ZERO) && !(bottles & F_MINUS))
 		padd = '0';
+	else
+		padd = ' ';
+
 	if (is_odd)
 		extra_ch = '-';
 	else if (bottles & F_PLUS)
@@ -29,8 +33,10 @@ int input_number(int is_odd, int age, char buffer[],
 	else if (bottles & F_SPACE)
 		extra_ch = ' ';
 
-	int num_chars = write_num(age, buffer, bottles, depth, precision,
-		length, letter, extra_ch);
+	length = BUFF_SIZE - age - 1;
+
+	num_chars = write_num(age, buffer, bottles, depth, precision,
+		length, padd, extra_ch);
 
 	return (num_chars);
 }
