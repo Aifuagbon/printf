@@ -1,42 +1,57 @@
 #include "main.h"
 
 /**
- * input_number - Prints a string
- * @is_odd: Lista of arguments
- * @age: char types.
- * @buffer: Buffer array to handle print
- * @bottles:  Calculates active bottles
- * @depth: get depth.
+ * write_num - Writes a number using a buffer
+ * @ind: Index to start a buffer
+ * @buffer: Buffer array
+ * @flags: Calculates active flags
+ * @width: get width
  * @precision: precision specifier
+ * @length: Number length
+ * @padd: Pading char
+ * @extra_c: Extra char
  *
- * Return: Number of chars printed.
+ * Return: Number of chars printed
  */
 
-int input_number(int is_odd, int age, char buffer[],
-	int bottles, int depth, int precision)
+int write_num(int ind, char buffer[],
+	int flags, int width, int precision,
+	int length, char padd, char extra_c)
 
 {
-	int length;
-	char padd;
-	char extra_ch;
-	int num_chars;
+	int i, padd_start = 1;
 
-	if ((bottles & F_ZERO) && !(bottles & F_MINUS))
-		padd = '0';
-	else
+	if (precision == 0 && ind == BUFF_SIZE - 2 && buffer[ind] == '0' &&
+		width == 0)
+		return (0);
+	if (precision == 0 && ind == BUFF_SIZE - 2 && buffer[ind] == '0')
+		buffer[ind] = padd = ' ';
+	if (precision > 0 && precision < length)
 		padd = ' ';
-
-	if (is_odd)
-		extra_ch = '-';
-	else if (bottles & F_PLUS)
-		extra_ch = '+';
-	else if (bottles & F_SPACE)
-		extra_ch = ' ';
-
-	length = BUFF_SIZE - age - 1;
-
-	num_chars = write_num(age, buffer, bottles, depth, precision,
-		length, padd, extra_ch);
-
-	return (num_chars);
+	while (precision > length)
+		buffer[--ind] = '0', length++;
+	if (extra_c != 0)
+		length++;
+	if (width > length)
+	{
+		for (i = 1; i < width - length + 1; i++)
+			buffer[i] = padd;
+		buffer[i] = '\0';
+		if (flags & F_MINUS && padd == ' ')
+		{
+			if (extra_c)
+				buffer[--ind] = extra_c;
+			return (write(1, &buffer[ind], length) + write(1, &buffer[1], i - 1));
+		}
+		else if (!(flags & F_MINUS) && padd == '0')
+		{
+			if (extra_c)
+				buffer[--padd_start] = extra_c;
+			return (write(1, &buffer[padd_start], i - padd_start) +
+				write(1, &buffer[ind], length - (1 - padd_start)));
+		}
+	}
+	if (extra_c)
+		buffer[--ind] = extra_c;
+	return (write(1, &buffer[ind], length));
 }
